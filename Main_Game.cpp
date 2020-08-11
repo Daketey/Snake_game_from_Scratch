@@ -20,7 +20,6 @@ wstring snake[1];
 
 unsigned char *playfield = nullptr;
 
-
 int Rotate_block(int x, int y, int r) {
     switch (r % 4)   //Since we are taking matrix of size 4X4
     {
@@ -28,7 +27,6 @@ int Rotate_block(int x, int y, int r) {
     case 1:return 12 + y - (x * 4);  //90 degree
     case 2:return 15 - (y * 4) - x;  //180 degree
     case 3:return 3 - y + (x * 4);     //270 degree
-
     }
 }
 
@@ -83,6 +81,9 @@ int main(){
     bool keyhold2 = false;
     bool keyhold3 = false;
 
+    int speed = 3;
+    int speedcounter = 0;
+
     int foodposx = rand()%widthoffield;
     int foodposy = rand()%heightoffield;
 
@@ -107,41 +108,62 @@ int main(){
     while (!gameover) {
 
         this_thread::sleep_for(50ms);
+        speedcounter++;
 
         for (int k = 0; k < 4; k++) {
             keys[k] = (0x8000 & GetAsyncKeyState((unsigned char)("DASW"[k]))) != 0;        //Key input in hexdecimal form,, \x27 is right key , \x25 is left key , \x28 is down key and we have the R key. 0x8000 gives real time state of the key
         }
 
         if (keys[1]) {
-            currentx -= (keyhold1 && collision(currentpiece, currentrotation, currentx - 1, currenty)) ? 1 : 0;
-            keyhold1 = false;
-        }
-        else {
             keyhold1 = true;
+            keyhold = false;
+            keyhold2 = false;
+            keyhold3 = false;
+        }
+        if (keyhold1) {
+            if (speedcounter >= speed && collision(currentpiece, currentrotation, currentx - 1, currenty)) {
+                currentx--;
+                speedcounter = 0;
+            }
         }
 
         if (keys[0]) {
-            currentx += (keyhold && collision(currentpiece, currentrotation, currentx + 1, currenty)) ? 1 : 0;
-            keyhold = false;
-        }
-        else {
+            keyhold1 = false;
             keyhold = true;
+            keyhold2 = false;
+            keyhold3 = false;
+        }
+        if (keyhold) {
+            if (speedcounter >= speed && collision(currentpiece, currentrotation, currentx + 1, currenty)) {
+                currentx++;
+                speedcounter = 0;
+            }
         }
 
         if (keys[3]) {
-            currenty -= (keyhold3 && collision(currentpiece, currentrotation, currentx, currenty - 1)) ? 1 : 0;
-            keyhold3 = false;
-        }
-        else {
+            keyhold1 = false;
+            keyhold = false;
+            keyhold2 = false;
             keyhold3 = true;
+        }
+        if (keyhold3) {
+            if (speedcounter >= speed && collision(currentpiece, currentrotation, currentx, currenty - 1)) {
+                currenty--;
+                speedcounter = 0;
+            }
         }
 
         if (keys[2]) {
-            currenty += (keyhold2 && collision(currentpiece, currentrotation, currentx, currenty + 1)) ? 1 : 0;
-            keyhold2 = false;
-        }
-        else {
+            keyhold1 = false;
+            keyhold = false;
             keyhold2 = true;
+            keyhold3 = false;
+        }
+        if (keyhold2) {
+            if (speedcounter >= speed && collision(currentpiece, currentrotation, currentx, currenty + 1)) {
+                currenty++;
+                speedcounter = 0;
+            }
         }
 
         for (int i = 0; i < widthoffield; i++) {                                        //Drawing the field
@@ -150,7 +172,7 @@ int main(){
             }
         }
 
-        if (keys[0] || keys[1] || keys[2] || keys[3])
+        if (keyhold|| keyhold1|| keyhold2|| keyhold3)
         {
             positions++;
 
@@ -174,13 +196,13 @@ int main(){
         }
 
         //FOOD LOOP
-        screen[foodposy + 4 * nScreenWidth + foodposx + 2] = '*';
+        screen[(foodposy + 2 )* nScreenWidth + (foodposx+2)] = '*';
 
         if (screen[Snake_pos[0]] == L'*')
         {
-            increment = 2 + increment;
-            foodposx = rand() % (widthoffield - 2);
-            foodposy = rand() % (heightoffield - 2);
+            increment = 3 + increment;
+            foodposx = (rand() % (widthoffield -1));
+            foodposy = (rand() % (heightoffield -1));
             foodpicked = true;
         }
         WriteConsoleOutputCharacter(hConsole, screen, nScreenWidth * nScreenHeight, { 0,0 }, &dwBytesWritten);  //draws to console starting from postion 0,0
