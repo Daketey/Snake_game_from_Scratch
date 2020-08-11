@@ -196,7 +196,11 @@ int main(){
         }
 
         //FOOD LOOP
-        screen[(foodposy + 2 )* nScreenWidth + (foodposx+2)] = '*';
+        for (int i = 0; i < 1;i++) {
+            for (int j = 0;j < 1;j++) {
+                screen[(foodposy+ + 3) * nScreenWidth + (foodposx+i + 2)] = '*';
+            }
+        }
 
         if (screen[Snake_pos[0]] == L'*')
         {
