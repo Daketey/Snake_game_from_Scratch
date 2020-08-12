@@ -20,17 +20,21 @@ unsigned char *playfield = nullptr;
 int Rotate_block(int x, int y, int r) {
     switch (r % 4)   //Since we are taking matrix of size 4X4
     {
-    case 0:return y * 4 + x;         //0 degree
-    case 1:return 12 + y - (x * 4);  //90 degree
-    case 2:return 15 - (y * 4) - x;  //180 degree
-    case 3:return 3 - y + (x * 4);     //270 degree
+    case 0:
+        return y * 4 + x;         //0 degree
+    case 1:
+        return 12 + y - (x * 4);  //90 degree
+    case 2:
+        return 15 - (y * 4) - x;  //180 degree
+    case 3:
+        return 3 - y + (x * 4);     //270 degree
     }
 }
 
 bool collision(int ntetria, int rotation, int x, int y) {
 
     for (int px = 0; px < 1; px++) {
-        for (int py = 0;py < 1;py++) {
+        for (int py = 0; py < 1; py++) {
 
             int pi = Rotate_block(px, py, rotation);  //Getting index into piece
 
@@ -49,9 +53,9 @@ bool collision(int ntetria, int rotation, int x, int y) {
     return true;
 }
 
-int main(){
+int main() {
 
-	snake[0] = L"X";                                    //Sprite for Snake Head
+    snake[0] = L"X";                                    //Sprite for Snake Head
 
     wchar_t* screen = new wchar_t[nScreenWidth * nScreenHeight];                // Create Screen Buffer
     for (int i = 0; i < nScreenWidth * nScreenHeight; i++)
@@ -66,7 +70,7 @@ int main(){
             playfield[j * widthoffield + i] = (i == 0 || j ==0 || i == widthoffield - 1 || j == heightoffield - 1) ? 1 : 0;    //Draws a square
         }
     }
-        
+
     bool gameover = false;
     int currentpiece = 0;
     int currentrotation = 0;
@@ -95,7 +99,7 @@ int main(){
     int clear=0;
 
 
-    for (int i = 0;i < 40*20;i++)
+    for (int i = 0; i < 40*20; i++)
     {
         Snake_pos[i] = L' ';
         snakepos[i] = 0;
@@ -164,7 +168,7 @@ int main(){
         }
 
         for (int i = 0; i < widthoffield; i++) {                                        //Drawing the field
-            for (int j = 0; j < heightoffield;j++) {
+            for (int j = 0; j < heightoffield; j++) {
                 screen[(j + 2) * nScreenWidth + (i + 2)] = L" #O"[playfield[j * widthoffield + i]];  //Characters are written as we want them to be displayed according to index like at index=1 , value is "A "
             }
         }
@@ -177,8 +181,8 @@ int main(){
 
         //SNAKE DRAWING LOOP
 
-        for (int i = 0; i < 1;i++) {
-            for (int j = 0;j < 1;j++) {
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 1; j++) {
                 if (snake[currentpiece][i + j] == L'X') {
                     screen[(currenty + j + 2) * nScreenWidth + (currentx + i + 2)] = 'X';
                     Snake_pos[0] = (currenty + j + 2) * nScreenWidth + (currentx + i + 2);
@@ -193,8 +197,8 @@ int main(){
         }
 
         //FOOD LOOP
-        for (int i = 0; i < 1;i++) {
-            for (int j = 0;j < 1;j++) {
+        for (int i = 0; i < 1; i++) {
+            for (int j = 0; j < 1; j++) {
                 screen[(foodposy+ + 3) * nScreenWidth + (foodposx+i + 2)] = '*';
             }
         }
@@ -208,8 +212,8 @@ int main(){
         }
         WriteConsoleOutputCharacter(hConsole, screen, nScreenWidth * nScreenHeight, { 0,0 }, &dwBytesWritten);  //draws to console starting from postion 0,0
     }
-        return 0;
-    }
+    return 0;
+}
 
-	
+
 
