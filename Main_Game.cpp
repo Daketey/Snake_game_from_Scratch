@@ -14,6 +14,8 @@ int ScreenHeight = 40;
 int Width_of_Field = 40;
 int Height_of_Field = 20;
 
+int addgit;
+
 wstring snake[2];
 
 unsigned char *playField = nullptr;
