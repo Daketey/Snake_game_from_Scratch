@@ -42,8 +42,8 @@ bool collision(int ntetria, int x, int y) {
 int main(){
 
 	snake[0] = L"X";                                    //Sprite for Snake Head
-        snake[1] = L"*";
-        snake[2] = L"C";
+    snake[1] = L"*";
+    snake[2] = L"C";
 
     wchar_t* screen = new wchar_t[ScreenWidth * ScreenHeight];                // Create Screen Buffer
     for (int i = 0; i < ScreenWidth * ScreenHeight; i++)
@@ -74,7 +74,7 @@ int main(){
     int speed = 2;
     int speedCounter = 0;
 
-    int foodPos_X = Width_of_Field / 3;
+    int foodPos_X = Width_of_Field / 2;
     int foodPos_Y = Height_of_Field / 4;
 
     int Snake_pos;
@@ -161,11 +161,12 @@ int main(){
             }
         }
 
+        
 
         if (keyHold_0 || keyHold_1 || keyHold_2 || keyHold_3){
         
             positions++;
-
+            speed = 2;
             //SNAKE DRAWING LOOP
 
             for (int i = 0; i < 1;i++) {
@@ -185,9 +186,18 @@ int main(){
             if (Snake_pos == (foodPos_Y + 2) * ScreenWidth + (foodPos_X + 2))
             {
                 increment = 2 + increment;
-                foodPos_X = (rand() % (Width_of_Field - 2)) + 1;
-                foodPos_Y = (rand() % (Height_of_Field - 2)) + 1;
+                foodPos_X = (rand() % (Width_of_Field - 3)) + 2;
+                foodPos_Y = (rand() % (Height_of_Field - 4)) + 3;
                 foodPicked = true;
+            }
+        }
+
+        //FOOD POS
+        for (int i = 0; i < 1;i++) {
+            for (int j = 0;j < 1;j++) {
+                if (snake[1][i + j] == L'*') {
+                    screen[(foodPos_Y + j + 2) * ScreenWidth + (foodPos_X + i + 2)] = '*';
+                }
             }
         }
 
@@ -225,19 +235,8 @@ int main(){
             }
         }
             
-        //FOOD POS
-        for (int i = 0; i < 1;i++) {
-            for (int j = 0;j < 1;j++) {
-                if (snake[1][i + j] == L'*') {
-                    screen[(foodPos_Y + j + 2) * ScreenWidth + (foodPos_X + i + 2)] = '*';
-                }
-            }
-        }
 
         WriteConsoleOutputCharacter(hConsole, screen, ScreenWidth * ScreenHeight, { 0,0 }, &dwBytesWritten);  //draws to console starting from postion 0,0
     }
         return 0;
     }
-
-	
-
