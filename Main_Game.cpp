@@ -14,9 +14,7 @@ int ScreenHeight = 40;
 int Width_of_Field = 40;
 int Height_of_Field = 20;
 
-int addgit;
-
-wstring snake[2];
+wstring snake[3];
 
 unsigned char *playField = nullptr;
 
@@ -38,7 +36,6 @@ bool collision(int ntetria, int x, int y) {
             }
         }
     }
-
     return true;
 }   
 
@@ -46,6 +43,7 @@ int main(){
 
 	snake[0] = L"X";                                    //Sprite for Snake Head
     snake[1] = L"*";
+    snake[2] = L"C";
 
     wchar_t* screen = new wchar_t[ScreenWidth * ScreenHeight];                // Create Screen Buffer
     for (int i = 0; i < ScreenWidth * ScreenHeight; i++)
@@ -84,6 +82,9 @@ int main(){
 
     int positions=-1;
 
+    int colposx = current_X;
+    int colposy = current_Y;
+
     bool foodPicked = false;
 
     int increment = 0;
@@ -105,10 +106,11 @@ int main(){
         }
 
         if (keys[1]) {
-            keyHold_1 = true;
-            keyHold_0 = false;
-            keyHold_2 = false;
-            keyHold_3 = false;
+            if (keyHold_0 == false) {
+                keyHold_1 = true;
+                keyHold_2 = false;
+                keyHold_3 = false;
+            }
         }
         if (keyHold_1) {
             if (speedCounter >= speed && collision(currentPiece, current_X - 1, current_Y)) {
@@ -118,10 +120,11 @@ int main(){
         }
 
         if (keys[0]) {
-            keyHold_1 = false;
-            keyHold_0 = true;
-            keyHold_2 = false;
-            keyHold_3 = false;
+            if (keyHold_1 == false) {
+                keyHold_0 = true;
+                keyHold_2 = false;
+                keyHold_3 = false;
+            }
         }
         if (keyHold_0) {
             if (speedCounter >= speed && collision(currentPiece, current_X + 1, current_Y)) {
@@ -131,10 +134,11 @@ int main(){
         }
 
         if (keys[3]) {
-            keyHold_1 = false;
-            keyHold_0 = false;
-            keyHold_2 = false;
-            keyHold_3 = true;
+            if (keyHold_2 == false) {
+                keyHold_1 = false;
+                keyHold_0 = false;
+                keyHold_3 = true;
+            }
         }
         if (keyHold_3) {
             if (speedCounter >= speed && collision(currentPiece, current_X, current_Y - 1)) {
@@ -144,10 +148,11 @@ int main(){
         }
 
         if (keys[2]) {
-            keyHold_1 = false;
-            keyHold_0 = false;
-            keyHold_2 = true;
-            keyHold_3 = false;
+            if (keyHold_3 == false) {
+                keyHold_1 = false;
+                keyHold_0 = false;
+                keyHold_2 = true;
+            }
         }
         if (keyHold_2) {
             if (speedCounter >= speed && collision(currentPiece, current_X, current_Y + 1)) {
@@ -155,6 +160,7 @@ int main(){
                 speedCounter = 0;
             }
         }
+
 
         if (keyHold_0 || keyHold_1 || keyHold_2 || keyHold_3){
         
@@ -182,6 +188,40 @@ int main(){
                 foodPos_X = (rand() % (Width_of_Field - 2)) + 1;
                 foodPos_Y = (rand() % (Height_of_Field - 2)) + 1;
                 foodPicked = true;
+            }
+        }
+
+        
+        if (keyHold_0) {
+            if (screen[(current_Y + 2) * ScreenWidth + (current_X + 3)] == L'#') {
+                gameOver = true;
+            }
+            else if (screen[(current_Y + 2) * ScreenWidth + (current_X + 3)] == L'O') {
+                gameOver = true;
+            }
+        }
+        if (keyHold_1) {
+            if (screen[(current_Y + 2) * ScreenWidth + (current_X + 1)] == L'#') {
+                gameOver = true;
+            }
+            else if (screen[(current_Y + 2) * ScreenWidth + (current_X + 1)] == L'O') {
+                gameOver = true;
+            }
+        }
+        if (keyHold_2) {
+            if (screen[(current_Y + 3) * ScreenWidth + (current_X + 2)] == L'#') {
+                gameOver = true;
+            }
+            else if (screen[(current_Y + 3) * ScreenWidth + (current_X + 2)] == L'O') {
+                gameOver = true;
+            }
+        }
+        if (keyHold_3) {
+            if (screen[(current_Y + 1) * ScreenWidth + (current_X + 2)] == L'#') {
+                gameOver = true;
+            }
+            else if (screen[(current_Y + 1) * ScreenWidth + (current_X + 2)] == L'O') {
+                gameOver = true;
             }
         }
             
