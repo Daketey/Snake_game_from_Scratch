@@ -42,8 +42,8 @@ bool collision(int ntetria, int x, int y) {
 int main(){
 
 	snake[0] = L"X";                                    //Sprite for Snake Head
-    snake[1] = L"*";
-    snake[2] = L"C";
+        snake[1] = L"*";
+        snake[2] = L"C";
 
     wchar_t* screen = new wchar_t[ScreenWidth * ScreenHeight];                // Create Screen Buffer
     for (int i = 0; i < ScreenWidth * ScreenHeight; i++)
