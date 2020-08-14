@@ -18,6 +18,19 @@ wstring snake[3];
 
 unsigned char *playField = nullptr;
 
+bool hitObstacle(bool keyhold, int x, int y,wchar_t *screen) {
+    if (keyhold) {
+        if (screen[(y) * ScreenWidth + (x)] == L'#') {
+            return true;
+        }
+        else if (screen[(y) * ScreenWidth + (x)] == L'O') {
+            return true;
+        }
+    }
+    return false;
+
+}
+
 bool collision(int ntetria, int x, int y) {
 
     for (int px = 0; px < 1; px++) {
@@ -66,10 +79,10 @@ int main(){
     int current_X = Width_of_Field / 2;
     int current_Y = Height_of_Field / 2;
     int keys[4];
-    bool keyHold_0 = false;
-    bool keyHold_1 = false;
-    bool keyHold_2 = false;
-    bool keyHold_3 = false;
+    bool keyHold_D = false;
+    bool keyHold_A = false;
+    bool keyHold_S = false;
+    bool keyHold_W = false;
 
     int speed = 2;
     int speedCounter = 0;
@@ -106,13 +119,13 @@ int main(){
         }
 
         if (keys[1]) {
-            if (keyHold_0 == false) {
-                keyHold_1 = true;
-                keyHold_2 = false;
-                keyHold_3 = false;
+            if (keyHold_D == false) {
+                keyHold_A = true;
+                keyHold_S = false;
+                keyHold_W = false;
             }
         }
-        if (keyHold_1) {
+        if (keyHold_A) {
             if (speedCounter >= speed && collision(currentPiece, current_X - 1, current_Y)) {
                 current_X--;
                 speedCounter = 0;
@@ -120,13 +133,13 @@ int main(){
         }
 
         if (keys[0]) {
-            if (keyHold_1 == false) {
-                keyHold_0 = true;
-                keyHold_2 = false;
-                keyHold_3 = false;
+            if (keyHold_A == false) {
+                keyHold_D = true;
+                keyHold_S = false;
+                keyHold_W = false;
             }
         }
-        if (keyHold_0) {
+        if (keyHold_D) {
             if (speedCounter >= speed && collision(currentPiece, current_X + 1, current_Y)) {
                 current_X++;
                 speedCounter = 0;
@@ -134,13 +147,13 @@ int main(){
         }
 
         if (keys[3]) {
-            if (keyHold_2 == false) {
-                keyHold_1 = false;
-                keyHold_0 = false;
-                keyHold_3 = true;
+            if (keyHold_S == false) {
+                keyHold_A = false;
+                keyHold_D = false;
+                keyHold_W = true;
             }
         }
-        if (keyHold_3) {
+        if (keyHold_W) {
             if (speedCounter >= speed && collision(currentPiece, current_X, current_Y - 1)) {
                 current_Y--;
                 speedCounter = 0;
@@ -148,13 +161,13 @@ int main(){
         }
 
         if (keys[2]) {
-            if (keyHold_3 == false) {
-                keyHold_1 = false;
-                keyHold_0 = false;
-                keyHold_2 = true;
+            if (keyHold_W == false) {
+                keyHold_A = false;
+                keyHold_D = false;
+                keyHold_S = true;
             }
         }
-        if (keyHold_2) {
+        if (keyHold_S) {
             if (speedCounter >= speed && collision(currentPiece, current_X, current_Y + 1)) {
                 current_Y++;
                 speedCounter = 0;
@@ -162,8 +175,7 @@ int main(){
         }
 
         
-
-        if (keyHold_0 || keyHold_1 || keyHold_2 || keyHold_3){
+        if (keyHold_D || keyHold_A || keyHold_S || keyHold_W){
         
             positions++;
             speed = 2;
@@ -192,7 +204,7 @@ int main(){
             }
         }
 
-        //FOOD POS
+        //FOOD DRAWING LOOP
         for (int i = 0; i < 1;i++) {
             for (int j = 0;j < 1;j++) {
                 if (snake[1][i + j] == L'*') {
@@ -201,40 +213,19 @@ int main(){
             }
         }
 
-        
-        if (keyHold_0) {
-            if (screen[(current_Y + 2) * ScreenWidth + (current_X + 3)] == L'#') {
-                gameOver = true;
-            }
-            else if (screen[(current_Y + 2) * ScreenWidth + (current_X + 3)] == L'O') {
-                gameOver = true;
-            }
+
+        if (hitObstacle(keyHold_D, current_X + 3, current_Y + 2, screen)) {
+            gameOver = true;
         }
-        if (keyHold_1) {
-            if (screen[(current_Y + 2) * ScreenWidth + (current_X + 1)] == L'#') {
-                gameOver = true;
-            }
-            else if (screen[(current_Y + 2) * ScreenWidth + (current_X + 1)] == L'O') {
-                gameOver = true;
-            }
+        else if (hitObstacle(keyHold_A, current_X + 1, current_Y + 2, screen)) {
+            gameOver = true;
         }
-        if (keyHold_2) {
-            if (screen[(current_Y + 3) * ScreenWidth + (current_X + 2)] == L'#') {
-                gameOver = true;
-            }
-            else if (screen[(current_Y + 3) * ScreenWidth + (current_X + 2)] == L'O') {
-                gameOver = true;
-            }
+        else if (hitObstacle(keyHold_S, current_X + 2, current_Y + 3, screen)) {
+            gameOver = true;
         }
-        if (keyHold_3) {
-            if (screen[(current_Y + 1) * ScreenWidth + (current_X + 2)] == L'#') {
-                gameOver = true;
-            }
-            else if (screen[(current_Y + 1) * ScreenWidth + (current_X + 2)] == L'O') {
-                gameOver = true;
-            }
+        else if (hitObstacle(keyHold_W, current_X + 2, current_Y + 1, screen)) {
+            gameOver = true;
         }
-            
 
         WriteConsoleOutputCharacter(hConsole, screen, ScreenWidth * ScreenHeight, { 0,0 }, &dwBytesWritten);  //draws to console starting from postion 0,0
     }
