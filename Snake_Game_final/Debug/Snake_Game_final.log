@@ -1,0 +1,4 @@
+﻿  Snake_Game_final.cpp
+C:\games\GIT\Snake_Game_final\Snake_Game_final\Snake_Game_final.cpp(7,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\games\GIT\Snake_Game_final\Snake_Game_final\Snake_Game_final.cpp(85,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Snake_Game_final.vcxproj -> C:\games\GIT\Snake_Game_final\Debug\Snake_Game_final.exe
